@@ -1,4 +1,92 @@
 
+
+### 1. 계층형 아키텍처 (Layerd Architecture)
+
+---
+
+#### 1.1 계층형 아키텍처 구조
+
+![](./img/layerd_architecture.png)
+
+- 우리가 흔히 개발하는 방식들은 계층형 아키텍처로 위와 같은 흐름을 가지고 있다.
+  
+1. Database Layer, Persistence Layer
+- 저장소에서 데이터를 불러와 dao(jpa entity)에 매핑한다.
+  - 저장소는 Database라고 이해하지 말고 `데이터를 저장하는 곳`이라고 이해하면 좋다.
+  - 때문에 저장소는 Database, File, 외부 API 등이 될 수 있다.
+- 저장소와 연결되어 저장소의 데이터를 처리하는 layer다.
+  - 주로 CRUD 작업을 실제로 처리하는 정보들을 가지고있다.
+2. Domain or Business or Service Layer
+- dao를 가지고와 실제 비지니스 로직을 수행하는 역할을 하며 애플리케이션 내부에서 수행해야하는 거의 모든 작업들을 진행한다.
+  - 애플리케이션 내부 사용자가 필요한 데이터를 리턴 (DTO)
+  - 저장소에 데이터를 삽입, 수정, 삭제를 진행하기 위해서 필요한 행위를 진행
+  - 입력 모델에 대한 유효성 검사
+  - 비지니스 로직에 대한 유효성 검사  
+  - 등등..
+3. Presentation Layer
+- 애플리케이션 외부의 사용자와의 상호작용을 처리하는 계층이다.
+  - 외부 사용자가 요청 수 있는 방법을 제공
+    - HTTP, TCP, CLI 
+  - 외부 사용자에게 요청을 어떻게 받을지 어떻게 응답을 할지 결정
+    - JSON, HTML, XML 
+  - 외부 사용자 요청에 대한 입력 모델을 검사
+
+
+
+#### 1.2. 계층형 아키텍쳐 패키지 구조
+- 모든 것을 일반화 하기는 힘들 겠지만 계층형 아키텍처의 패키지 구조는 기능별 또는 화면별로 패키지를 먼저 구분하고 아래와 같은 구조를 가질 것이다.
+```text
+└── member
+    ├── controller
+    │   └── MemberController.java
+    ├── dto
+    │   └── MemberDTO.java
+    ├── entity
+    │   └── Member.java
+    ├── repository
+    │   └── MemberJpaRepository.java
+    └── service
+        ├── MemberService.java
+        └── MemberServiceImpl.java
+```
+- controller 패키지는 Presentation Layer로써 사용자의 요청과 응답을 처리한다.
+- service 패키지는 Domain or Business or Service Layer 로써 member와 관련된 모든 비지니스 로직을 담당한다.
+  - service는 repository와 관련된 의존성을 가지고 있으며 dao 가져와서 비지니스 로직을 처리한다.
+  - service와 service, service와 controller는 dto를 통해서 데이터를 주고 받는다.
+- repositroy는 저장소에 데이터를 불러와 dao에 매핑을 한다.
+
+#### 1.3. 계층형 아키텍쳐에 대해 생각해보기
+
+- 계층형 아키텍쳐를 사용하면 관심사를 분리하여 각 계층별로 무엇을 해야할지가 명확하다.
+- 관련된 내용을 서로 모아놓기 때문에 응집도가 높고, 기본적으로 인터페이스를 두고 개발을 진행하기 때문에 결합도가 낮은 특징을 가지고 있다.
+  - 때문에 한눈에 알아보기 쉽고 쉽게 변경가능하다.
+
+#### 1.4. 계층형 아키텍쳐는 무엇이 문제일까?
+
+
+
+
+1. Domain(Business or Service) 계층 불러온 데이터를 통해서 Business 로직을 만든다.
+
+- dao(jpa entity)
+
+
+
+### 계층형 아키텍쳐
+
+
+### 포트와 어댑터 패턴
+- 포트와 어댑터 아키텍처를 적용하면 인터페이스나 기반 요소가
+- 사용자의 요구 사항 혹은 수용 능력에 영향을 받아 변경된다고 하더라도 애플리케이션의 주요 동작(도메인 로직 혹은 비즈니스 로직)에는 아무런 영향을 주지 않습니다.
+- 도메인 로직을 견고하게 유지하며 소프트웨어의 지속 가능성을 높일 수 있는 것이죠. 
+
+
+
+
+- 애플리케이션 계층이 인커밍/아웃고잉 어댑터에 의존성을 갖지 않는다.
+- 
+
+
 ### 유스 케이스 
 ---
 
@@ -24,3 +112,7 @@
     - 때문에 각 유스 케이스 별로 전용 입력 모델을 작성하는 것이 좋아 보인다.
     - 각 유스 케이스별로 전용 입력 모델을 작성하게 될 경우 입력 모델에 대한 역할을 명확하게 보여줄 수 있을 뿐더러, 다른 유스 케이스의 결합도 제거해서 불필요한 부수효과가 발생하지 않는다.
 - 책임 검증 역할을 구분하면 테스트 코드 작성이 쉬워질 뿐더러 서비스 로직이 무엇을 하는지 다른 개발자가 봐도 명확해 진다.
+
+> https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/ch01.html
+> https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture
+> https://jojoldu.tistory.com/603
