@@ -141,6 +141,8 @@
   - 클래스와 인터페이스는 default와 publice으로 밖에 접근 제어를 하지 못함으로 인해서 일반적인 계층형 아키텍처의 패키지 구조에서는 모든 계층을 public으로 열 수 밖에 없다.
   - ***우리가 원하는 계층으로 흘러가기를 원할 뿐이지 실제로 제어할 수는 없는 문제가 발생***한다. 
 
+> https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/ch01.html <br/>
+> https://jojoldu.tistory.com/603 <br/>
 
 
 
@@ -280,9 +282,10 @@
   - 프론트의 요청으로 가공된 읽기 데이터는 양방향 매핑 전략 사용하기
   - 변경에 관한 비지니스 로직들은 완전 매핑 전략 사용하기
 - 해당 가이드라인을 정해 두었으면 왜 이러한 매핑 전략을 선택하게 되었는지에 대해서 정의하여 새로운 개발자가 와도 빠르게 적응할 수 있도록 하자.  
- 
 
+> 톰 홈버그, 만들면서 배우는 클린 아키텍처 p97-105
 
+> https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture <br/>
 
 
 
