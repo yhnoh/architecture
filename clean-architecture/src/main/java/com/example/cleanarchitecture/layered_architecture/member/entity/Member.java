@@ -1,4 +1,4 @@
-package com.example.cleanarchitecture.layerd_architecture.member.entity;
+package com.example.cleanarchitecture.layered_architecture.member.entity;
 
 
 public class Member {

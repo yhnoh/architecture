@@ -1,4 +1,4 @@
-package com.example.cleanarchitecture.layerd_architecture.member.dto;
+package com.example.cleanarchitecture.layered_architecture.member.dto;
 
 import lombok.Getter;
 

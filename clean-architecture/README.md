@@ -285,7 +285,7 @@
 
 > 톰 홈버그, 만들면서 배우는 클린 아키텍처 p97-105
 
-> https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture <br/
+> https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture <br/>
 
 
 ### 1. 아키텍처 구조 판단하기
@@ -316,9 +316,14 @@
      - package-private 접근 제한자는 다른 패키지에서는 접근이 불가능하다. 하위 패키지 임에도 자바는 다른 패키지로 인식하기 때문에 package-private에 접근할 수 없다.
      - 하나의 패키지 안에 너무 많은 클래스가 존재하면 코드를 쉽게 찾게하기 위해서 하위 패키지를 분리하고자하는 욕구가 생기기 마련이다.
        - 이렇게 되면 package-private이던 접근 제한자에서 public으로 변경되어 외부에 클래스가 노출 되는 경우가 발생할 수 있다.
+       > 패키지에 최소한의 필요 클래스를 넣어서 관리하는 것도 하나의 방법이다.
      - 의존성 규칙이 깨질 수 있는 상황이 발생할 수 있다.
 2. 컴파일 후 체크
+   - package-private 접근 제한자를 통한 경계 구분의 한계는 클래스가 많아져 하위 패키지를 만들 경우 클래스를 public으로 열어야하는 일이 발생한다는 것이다.
    - 
+
+> [Archunit](https://www.archunit.org/userguide/html) <br/>
+> [Archunit User Guide](https://www.archunit.org/userguide/html)
 
 
 
