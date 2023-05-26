@@ -330,9 +330,11 @@
    - 컴파일 후 체크는 아키텍처 구조적인 변경이 일어날 때 마다 지속적으로 유지보수를 해주어 우리가 원하는 방향으로 갈 수 있도록 해야한다.
 
 > [Archunit](https://www.archunit.org/userguide/html) <br/>
-> [Archunit User Guide](https://www.archunit.org/userguide/html)
+> [Archunit User Guide](https://www.archunit.org/userguide/html) <br/>
 
-
+3. 빌드 아티팩트
+   - 현재까지 아키텍처의 경계를 구분한 유일한 도구는 패키지였지만 빌드 아티팩트를 활용하여 경계를 구분지을 수 있다.
+   - 현재 단계에서는 고려해야하는 사항은 아닌것 같다.
 
 - 계층을 지날때마다 많은 매핑 작업은 일어나지만 
 1. Domain(Business or Service) 계층 불러온 데이터를 통해서 Business 로직을 만든다.
