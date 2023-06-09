@@ -597,6 +597,8 @@
 - 그래야 그중 하나라도 실패하게 될 경우 다 같이 롤백할 수 있기 때문이다.
 - 영속성 어댑터에는 어떤 데이터베이스 연산이 같은 유스케이스에 포함되는지 알지 못하기 때문에 언제 트랜잭션을 열고 닫을지 결정할 수 없다.
 
+> 톰 홈버그, 만들면서 배우는 클린 아키텍처 63-79
+
 
 > https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/ch01.html
 > https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture
