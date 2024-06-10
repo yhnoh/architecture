@@ -7,10 +7,9 @@ services:
       - 4510-4559:4510-4559 # external services port range
     environment:
       # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
-      - SERVICES=sns,sqs
-      - DEFAULT_REGION=
-      - AWS_ACCESS_KEY_ID=
-      - AWS_SECRET_ACCESS_KEY=
+      - SERVICES=sns,sqs,iam,sts
+      - AWS_ACCESS_KEY_ID=qwer
+      - AWS_SECRET_ACCESS_KEY=1234      
       - DEBUG=0
     volumes:
       - "./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
