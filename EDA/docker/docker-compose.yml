@@ -8,9 +8,10 @@ services:
     environment:
       # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
       - SERVICES=sns,sqs,iam,sts
-      - AWS_ACCESS_KEY_ID=qwer
-      - AWS_SECRET_ACCESS_KEY=1234      
-      - DEBUG=0
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - ENABLE_CONFIG_UPDATES=1
+      - DEBUG=1
     volumes:
       - "./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
       - "./localstack:/var/lib/localstack"
