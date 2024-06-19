@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class LocalStackController {
     }
 
     @SqsListener("my-queue")
-    public void receiveMessage(@Payload MessageBody messageBody) {
-        System.out.println("messageBody = " + messageBody);
+    public void receiveMessage(@Headers Map<String, String> headers, @Payload MessageBody messageBody) {
+        System.out.println("headers = " + headers + ", messageBody = " + messageBody);
     }
 }
