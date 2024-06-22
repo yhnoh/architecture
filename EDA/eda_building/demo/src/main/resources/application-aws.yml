@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${aws.access-key}
+        secret-key: ${aws.secret-key}
+      region:
+        static: ${aws.region}
+      sqs:
+        enabled: true
