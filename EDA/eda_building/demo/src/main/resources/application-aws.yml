@@ -5,10 +5,10 @@ spring:
     driver-class-name: org.h2.Driver
   batch:
     jdbc:
-      initialize-schema: embedded
-
+      initialize-schema: always
     job:
-      name: ${job.names}
+      #      name: ${job.names:NONE}
+      enabled: false
   cloud:
     aws:
       credentials:

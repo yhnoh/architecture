@@ -2,8 +2,10 @@ package com.example.demo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -22,13 +24,15 @@ public class DlqController {
 
     private static final String QUEUE_NAME = "HELLO_DLQ";
 
+    private final JobExplorer jobExplorer;
     private final JobLauncher jobLauncher;
     private final Job dlqJob;
     private final DlqService dlqService;
 
-    @GetMapping("/dlq")
-    public void dlqBatch() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        jobLauncher.run(dlqJob, new JobParametersBuilder().toJobParameters());
+    @GetMapping("/dlq/batch")
+    public String dlqBatch() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        JobExecution jobExecution = jobLauncher.run(dlqJob, new JobParametersBuilder(jobExplorer).getNextJobParameters(dlqJob).toJobParameters());
+        return jobExecution.toString();
     }
 
 
