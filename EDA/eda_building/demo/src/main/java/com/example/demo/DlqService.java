@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 public class DlqService {
 
-
     private final SqsAsyncClient sqsAsyncClient;
 
     public StartMessageMoveTaskResponse startMessageMoveTaskResponse(String queueName) throws ExecutionException, InterruptedException {

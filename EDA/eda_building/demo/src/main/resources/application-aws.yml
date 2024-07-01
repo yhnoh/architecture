@@ -18,3 +18,5 @@ spring:
         static: ${aws.region}
       sqs:
         enabled: true
+      sns:
+        enabled: true
