@@ -23,10 +23,10 @@ public class EventRecordService {
                 .build();
 
         eventRecordJpaRepository.save(eventRecordJpaEntity);
+        eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
+
         String eventPayload = objectMapper.writeValueAsString(eventRecordMessage);
         eventRecordJpaEntity.setEventPayload(eventPayload);
-
-        eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
 
 
 //        throw new IllegalArgumentException("예외 발생시 정상 롤백하는지 확인");
