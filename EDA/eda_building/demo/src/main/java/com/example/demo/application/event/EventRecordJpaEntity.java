@@ -34,4 +34,8 @@ class EventRecordJpaEntity {
     void setEventPayload(String eventPayload) {
         this.eventPayload = eventPayload;
     }
+
+    public void publish() {
+        published = true;
+    }
 }

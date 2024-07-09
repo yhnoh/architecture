@@ -1,16 +1,20 @@
 package com.example.demo.application.order;
 
 import com.example.demo.application.event.EventRecordMessage;
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Getter
+
+@Setter
+@ToString(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderEventMessage extends EventRecordMessage {
 
-    private final long orderId;
+    private long orderId;
 
-    public OrderEventMessage(Object source, long orderId) {
-        super(source);
+    public OrderEventMessage(long orderId) {
         this.orderId = orderId;
     }
-
 }

@@ -15,4 +15,10 @@ public class OrderController {
     public void order(@RequestParam String goodsName) {
         orderService.order(goodsName);
     }
+
+//    @GetMapping("/application/order-event-record-exception")
+//    public void order(@RequestParam String goodsName) {
+//        orderService.order(goodsName);
+//    }
+
 }

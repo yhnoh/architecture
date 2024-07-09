@@ -27,9 +27,37 @@ public class EventRecordService {
 
         String eventPayload = objectMapper.writeValueAsString(eventRecordMessage);
         eventRecordJpaEntity.setEventPayload(eventPayload);
-
-
-//        throw new IllegalArgumentException("예외 발생시 정상 롤백하는지 확인");
     }
+
+
+    @Transactional
+    public void update(long eventRecordId) {
+        eventRecordJpaRepository.findById(eventRecordId)
+                .ifPresent(eventRecordJpaEntity -> {
+                    eventRecordJpaEntity.publish();
+                });
+    }
+
+
+/*
+    @Transactional
+    public void save(EventRecordMessage eventRecordMessage) throws JsonProcessingException {
+
+        EventRecordJpaEntity eventRecordJpaEntity = EventRecordJpaEntity.builder()
+                .published(false)
+                .publishedAt(eventRecordMessage.getPublishedAt())
+                .build();
+
+        eventRecordJpaRepository.save(eventRecordJpaEntity);
+        eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
+
+        String eventPayload = objectMapper.writeValueAsString(eventRecordMessage);
+        eventRecordJpaEntity.setEventPayload(eventPayload);
+
+
+        throw new IllegalArgumentException("예외 발생시 정상 롤백하는지 확인");
+    }
+
+    */
 
 }

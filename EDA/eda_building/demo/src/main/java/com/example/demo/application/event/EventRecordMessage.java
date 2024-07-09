@@ -1,28 +1,21 @@
 package com.example.demo.application.event;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.context.ApplicationEvent;
+import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Getter
-public abstract class EventRecordMessage extends ApplicationEvent {
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class EventRecordMessage {
 
     @Setter(AccessLevel.PACKAGE)
     private long eventRecordId;
-
-    public EventRecordMessage(Object source) {
-        super(source);
-    }
+    private final LocalDateTime publishedAt = LocalDateTime.now();
 
     public LocalDateTime getPublishedAt() {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(super.getTimestamp()), ZoneId.systemDefault());
+        return publishedAt;
     }
-
 
 }

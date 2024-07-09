@@ -17,7 +17,7 @@ public class OrderService {
         OrderJpaEntity orderJpaEntity = OrderJpaEntity.builder().goodsName(goodsName).build();
         orderJpaRepository.save(orderJpaEntity);
 
-        OrderEventMessage orderEventMessage = new OrderEventMessage(this, orderJpaEntity.getId());
+        OrderEventMessage orderEventMessage = new OrderEventMessage(orderJpaEntity.getId());
         applicationEventPublisher.publishEvent(orderEventMessage);
 
     }
