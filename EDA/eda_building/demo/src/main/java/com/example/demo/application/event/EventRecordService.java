@@ -17,15 +17,20 @@ public class EventRecordService {
     @Transactional
     public void save(EventRecordMessage eventRecordMessage) throws JsonProcessingException {
 
+
         EventRecordJpaEntity eventRecordJpaEntity = EventRecordJpaEntity.builder()
                 .published(false)
                 .publishedAt(eventRecordMessage.getPublishedAt())
+                .eventName(eventRecordMessage.getEventName())
                 .build();
 
         eventRecordJpaRepository.save(eventRecordJpaEntity);
+
+        //이벤트 전송 전 eventRecordId를 등록하여 전송
         eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
 
-        String eventPayload = objectMapper.writeValueAsString(eventRecordMessage);
+        //eventPayload 객체를 JSON 문자열로 변환하여 저장
+        String eventPayload = objectMapper.writeValueAsString(eventRecordMessage.getEventPayload());
         eventRecordJpaEntity.setEventPayload(eventPayload);
     }
 
@@ -34,30 +39,7 @@ public class EventRecordService {
     public void update(long eventRecordId) {
         eventRecordJpaRepository.findById(eventRecordId)
                 .ifPresent(eventRecordJpaEntity -> {
-                    eventRecordJpaEntity.publish();
+                    eventRecordJpaEntity.published();
                 });
     }
-
-
-/*
-    @Transactional
-    public void save(EventRecordMessage eventRecordMessage) throws JsonProcessingException {
-
-        EventRecordJpaEntity eventRecordJpaEntity = EventRecordJpaEntity.builder()
-                .published(false)
-                .publishedAt(eventRecordMessage.getPublishedAt())
-                .build();
-
-        eventRecordJpaRepository.save(eventRecordJpaEntity);
-        eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
-
-        String eventPayload = objectMapper.writeValueAsString(eventRecordMessage);
-        eventRecordJpaEntity.setEventPayload(eventPayload);
-
-
-        throw new IllegalArgumentException("예외 발생시 정상 롤백하는지 확인");
-    }
-
-    */
-
 }

@@ -1,5 +1,6 @@
 package com.example.demo.application.order;
 
+import com.example.demo.application.event.EventRecordMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,9 @@ public class OrderService {
         OrderJpaEntity orderJpaEntity = OrderJpaEntity.builder().goodsName(goodsName).build();
         orderJpaRepository.save(orderJpaEntity);
 
-        OrderEventMessage orderEventMessage = new OrderEventMessage(orderJpaEntity.getId());
-        applicationEventPublisher.publishEvent(orderEventMessage);
+        OrderEventPayload orderEventPayload = new OrderEventPayload(orderJpaEntity.getId());
+        EventRecordMessage<OrderEventPayload> eventRecordMessage = new EventRecordMessage<>("TEST_ER", orderEventPayload);
+        applicationEventPublisher.publishEvent(eventRecordMessage);
 
     }
 }

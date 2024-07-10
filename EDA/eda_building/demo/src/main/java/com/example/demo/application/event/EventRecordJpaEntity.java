@@ -18,24 +18,25 @@ class EventRecordJpaEntity {
     @Column(name = "id")
     private long id;
 
+    @Builder.Default
     @Column(name = "published")
     private boolean published = false;
 
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+    @Column(name = "event_channel")
+    private String eventName;
+
+    @Setter(AccessLevel.PACKAGE)
     @Column(name = "event_payload")
     private String eventPayload;
 
     @Builder.Default
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    void setEventPayload(String eventPayload) {
-        this.eventPayload = eventPayload;
-    }
-
-    public void publish() {
+    
+    public void published() {
         published = true;
     }
 }

@@ -1,21 +1,24 @@
 package com.example.demo.application.event;
 
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EventRecordMessage {
+public final class EventRecordMessage<T> {
 
     @Setter(AccessLevel.PACKAGE)
     private long eventRecordId;
+    private final String eventName;
+    private final T eventPayload;
     private final LocalDateTime publishedAt = LocalDateTime.now();
 
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
+    public EventRecordMessage(String eventName, T eventPayload) {
+        this.eventName = eventName;
+        this.eventPayload = eventPayload;
     }
 
 }
