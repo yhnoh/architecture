@@ -230,8 +230,121 @@ public class SNSController {
 
 #### 3.2. 애플리케이션 -> SNS 이벤트 재발행을 위한 메시지 보관
 
+- 메시지 보관을 위해서는 원격 저장소와 애플리케이션에서 메시지를 발행하는 시점에 해당 메시지를 보관할 수 있는 방법이 필요하다.
+- 원격 저장소의 경우에는 RDB를 선택하였고, 해당 메시지를 보관하기 위한 스키마는 아래와 같다.
+```sql
+
+```
+- 메시지를 전송하는 시점에 해당 메시지를 보관할 수 있도록 하기 위하여 먼저 Message 클래스를 정의한다.
+```java
+@Getter
+public final class EventRecordMessage<T> {
+
+    @Setter(AccessLevel.PACKAGE)
+    private long eventRecordId;
+    private final String eventName;
+    private final T eventPayload;
+    private final LocalDateTime publishedAt = LocalDateTime.now();
+
+    public EventRecordMessage(String eventName, T eventPayload) {
+        this.eventName = eventName;
+        this.eventPayload = eventPayload;
+    }
+
+}
+```
+- `eventName`으로는 SNS 토픽의 이름을, `eventPaload`는 SNS로 전달할 원시 메시지의 값을 넣는다.
+
+```java
+
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final OrderJpaRepository orderJpaRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    @Transactional
+    public void order(String goodsName) {
+        //로직 수행
+        OrderJpaEntity orderJpaEntity = OrderJpaEntity.builder().goodsName(goodsName).build();
+        orderJpaRepository.save(orderJpaEntity);
+        
+        //이벤트 발행
+        OrderEventPayload orderEventPayload = new OrderEventPayload(orderJpaEntity.getId());
+        EventRecordMessage<OrderEventPayload> eventRecordMessage = new EventRecordMessage<>("TEST_ER", orderEventPayload);
+        applicationEventPublisher.publishEvent(eventRecordMessage);
+
+    }
+}
+```
+- `ApplicationEventPublisher`를 이용하여 이벤트를 발행한다. 해당 이벤트를 전달받는 곳은 총 두곳이다.
+  - 이벤트를 처리하기 위한 리스너
+  - 이벤트를 기록하기 위한 리스너
+- 먼저 이벤트를 처리하기 위한 리스너를 먼저 확인해보자.
+```java
+@Component
+@RequiredArgsConstructor
+public class OrderEventListener {
+
+    private final SnsTemplate snsTemplate;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void orderListener(EventRecordMessage<OrderEventPayload> eventRecordMessage) {
+        snsTemplate.convertAndSend(eventRecordMessage.getEventName(), eventRecordMessage);
+    }
+}
+```
+- `EventRecordMessage`에서 `eventPaload` 객체를 SNS에게 전달하여 주문 이후에 관련된 이벤트를 처리하게 된다.
+- 이벤트를 기록하기 위한 리스너도 한번 확인해보자.
+```java
+@Component
+@RequiredArgsConstructor
+public class EventRecordListener {
+
+    private final EventRecordService eventRecordService;
+
+    @EventListener
+    public void saveEventRecordListener(EventRecordMessage eventRecordMessage) throws JsonProcessingException {
+        eventRecordService.save(eventRecordMessage);
+        System.out.println("주문 이벤트 전송 전 이벤트 레코드 등록");
+    }
+}
 
 
+@Service
+@RequiredArgsConstructor
+public class EventRecordService {
+
+    private final EventRecordJpaRepository eventRecordJpaRepository;
+    private final ObjectMapper objectMapper;
+
+    @Transactional
+    public void save(EventRecordMessage eventRecordMessage) throws JsonProcessingException {
+
+
+        EventRecordJpaEntity eventRecordJpaEntity = EventRecordJpaEntity.builder()
+                .published(false)
+                .publishedAt(eventRecordMessage.getPublishedAt())
+                .eventName(eventRecordMessage.getEventName())
+                .build();
+
+        eventRecordJpaRepository.save(eventRecordJpaEntity);
+
+        //이벤트 전송 전 eventRecordId를 등록하여 전송
+        eventRecordMessage.setEventRecordId(eventRecordJpaEntity.getId());
+
+        //eventPayload 객체를 JSON 문자열로 변환하여 저장
+        String eventPayload = objectMapper.writeValueAsString(eventRecordMessage.getEventPayload());
+        eventRecordJpaEntity.setEventPayload(eventPayload);
+    }
+}
+```
+- 이벤트를 기록하기 위한 리스너로서는 해당 이벤트 메시지를 전달받아, 처리하게끔 되어 있다.
+- 전달받은 이벤트를 기록하기 위하여 JPA를 이용하고 있고, 이벤트가 저장한 이후에 EventRecordMessage에 eventId를 set하고 있는것을 확인할 수 있다.
+
+ 
 
 - 클라이언트가 요청을 진행한 이후
 
