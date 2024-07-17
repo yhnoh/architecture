@@ -344,7 +344,7 @@ public class EventRecordService {
 - 이벤트를 기록하기 위한 리스너로서는 해당 이벤트 메시지를 전달받아, 처리하게끔 되어 있다.
 - 전달받은 이벤트를 기록하기 위하여 JPA를 이용하고 있고, 이벤트가 저장한 이후에 EventRecordMessage에 eventId를 set하고 있는것을 확인할 수 있다.
 
- 
+ sd
 
 - 클라이언트가 요청을 진행한 이후
 
